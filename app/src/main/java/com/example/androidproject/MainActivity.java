@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,20 +29,20 @@ public class MainActivity extends AppCompatActivity {
         if(checkPermission()){
             //permission allowed
             String path = Environment.getExternalStorageDirectory().getPath();
-            //Remplacer la ligne du dessous par : if (savedInstanceState == null)
-            if (true) {
                 Bundle bundle = new Bundle();
                 bundle.putString("path", path);
-                bundle.putBoolean("move_file",false);
                 getSupportFragmentManager().beginTransaction()
                         .setReorderingAllowed(true)
                         .add(R.id.frame_layout_container, FileList.class, bundle)
                         .commit();
-            }
 
         }else{
             //permission not allowed
             requestPermission();
+            if (checkPermission()){
+                Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "Please Relaunch the app", Toast.LENGTH_SHORT);
+            }
         }
     }
 
@@ -59,4 +60,5 @@ public class MainActivity extends AppCompatActivity {
         }else
             ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},111);
     }
+
 }

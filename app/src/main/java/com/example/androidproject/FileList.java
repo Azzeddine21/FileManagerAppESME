@@ -1,29 +1,24 @@
 package com.example.androidproject;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Environment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class FileList extends Fragment {
 
@@ -35,7 +30,7 @@ public class FileList extends Fragment {
         super(R.layout.fragment_file_list);
     }
 
-    @Override
+        @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -43,39 +38,36 @@ public class FileList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view;
         // Inflate the layout for this fragment
 
-        if(requireArguments().getBoolean("move_file")){
+        if(requireArguments().getBoolean("MoveFile")){
             view = inflater.inflate(R.layout.fragment_move_file, container, false);
-            View Cancel = view.findViewById(R.id.cancel_button);
-            Cancel.setOnClickListener(new View.OnClickListener(){
+            Button cancel = view.findViewById(R.id.cancel_button);
+            Bundle bundle = new Bundle();
+            cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("path", requireArguments().getString("path"));
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    FileList nextFrag= new FileList();
-                    for(int i=0;i< activity.getSupportFragmentManager().getBackStackEntryCount(); i++){
-                        activity.getSupportFragmentManager().popBackStack();
-                    }
-                    //activity.getSupportFragmentManager().beginTransaction()
-                     //       .replace(R.id.frame_layout_container, FileList.class, bundle)
-                       //     .commit();
+                    getActivity().finish();
                 }
             });
-            View ok = view.findViewById(R.id.ok_button);
-            ok.setOnClickListener(new View.OnClickListener(){
+            Button ok = view.findViewById(R.id.ok_button);
+            ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getActivity().getSupportFragmentManager().popBackStack("moveFileTag", getActivity().getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
-                    Toast.makeText(view.getContext(), "OK", Toast.LENGTH_SHORT);
+                    File from = new File(requireArguments().getString("SelectedFile"));
+                    File to = new File(root.getAbsolutePath() + "/" + from.getName());
+                    Log.d("from", from.getAbsolutePath());
+                    Log.d("to", to.getAbsolutePath());
+                    from.renameTo(to);
+                    adapter.updatefilesAndFolders();
+                    getActivity().finish();
                 }
             });
-
-        }else{
+        }
+        else{
             view = inflater.inflate(R.layout.fragment_file_list, container, false);
-
             View CreateFolder = view.findViewById(R.id.add_Folder);
             CreateFolder.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -114,17 +106,12 @@ public class FileList extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         root = new File(requireArguments().getString("path"));
-        adapter = new MyAdapter(getContext(), root);
-        if (requireArguments().getBoolean("move_file")){
-            adapter.setmovingfile(true);
-        }
+        adapter = new MyAdapter(getContext(), root,requireArguments().getBoolean("MoveFile"),requireArguments().getString("SelectedFile"));
         recyclerView.setAdapter(adapter);
         if(root.listFiles()==null || root.listFiles().length ==0){
             noFilesText.setVisibility(View.VISIBLE);
         }
         noFilesText.setVisibility(View.INVISIBLE);
-        Log.d("Files", Arrays.toString(root.listFiles()));
         return view;
     }
-
 }

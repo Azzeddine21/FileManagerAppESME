@@ -35,7 +35,7 @@
                     android:layout_marginRight="@dimen/efab_ui_margin_large"
                     app:efab_iconAnimationRotationDeg="45"
                     app:efab_openingAnimationDurationMs="250"
-                    app:efab_closingAnimationDurationMs="250"/>
+                    app:efab_closingAnimationDurationMs="250" />
 
                 <com.nambimobile.widgets.efab.FabOption
                     android:id="@+id/add_Folder"
@@ -43,7 +43,8 @@
                     android:layout_height="wrap_content"
                     app:fab_icon="@drawable/ic_baseline_create_new_folder_24"
                     app:label_text="Ajouter un dossier"
-                    android:onClick="CreateFolder"/>
+                    android:onClick="CreateFolder"
+                    />
 
         </com.nambimobile.widgets.efab.ExpandableFabLayout>
 

@@ -1,10 +1,13 @@
 package com.example.androidproject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,13 +32,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Context context;
     private File[] filesAndFolders;
     private File root;
-    private boolean movingfile;
+    private boolean MoveFile=false;
+    private String SelectedFile="";
 
     public MyAdapter(Context context, File root){
         this.context = context;
         this.root = root;
         updatefilesAndFolders();
-        movingfile = false;
+    }
+
+    public MyAdapter(Context context, File root, boolean MoveFile, String SelectedFile){
+        this(context,root);
+        this.MoveFile = MoveFile;
+        this.SelectedFile = SelectedFile;
     }
 
     @Override
@@ -63,11 +71,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     Bundle bundle = new Bundle();
                     bundle.putString("path", selectedFile.getAbsolutePath());
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    FileList nextFrag= new FileList();
-                    if (movingfile){
-                        bundle.putBoolean("move_file",true);
-                        //activity.getSupportFragmentManager().beginTransaction().addToBackStack("moveFileTag");
+                    if(MoveFile){
+                        bundle.putBoolean("MoveFile",true);
+                        bundle.putString("SelectedFile",SelectedFile);
                     }
+                    FileList nextFrag= new FileList();
                     activity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frame_layout_container, FileList.class, bundle)
                             .addToBackStack(null)
@@ -96,15 +104,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                             }
                         }
                         if(item.getTitle().equals("MOVE")){
-                            Bundle bundle = new Bundle();
-                            bundle.putString("path", Environment.getExternalStorageDirectory().getPath());
-                            bundle.putBoolean("move_file",true);
-                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                            FileList nextFrag = new FileList();
-                            activity.getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.frame_layout_container, FileList.class, bundle)
-                                    .addToBackStack("moveFileTag")
-                                    .commit();
+                            Intent intent = new Intent(v.getContext(), MoveFile.class);
+                            String path = Environment.getExternalStorageDirectory().getPath();
+                            intent.putExtra("path",path);
+                            intent.putExtra("SelectedFile",selectedFile.getAbsolutePath());
+                            ((Activity) context).startActivity(intent);
                         }
                         if(item.getTitle().equals("RENAME")){
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getRootView().getContext());
@@ -199,11 +203,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return _filesAndFolders;
     }
 
-    public void setmovingfile(boolean move_file){
-        this.movingfile = move_file;
-    }
-
     public boolean move_file(String filePath){
         return root.renameTo(new File(filePath));
     }
+
 }

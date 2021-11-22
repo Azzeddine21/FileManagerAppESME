@@ -1,8 +1,11 @@
 package com.example.androidproject;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -32,12 +35,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private File root;
     private boolean movingfile;
 
+
     public MyAdapter(Context context, File root){
         this.context = context;
         this.root = root;
         updatefilesAndFolders();
         movingfile = false;
     }
+
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -83,6 +90,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 popupMenu.getMenu().add("DELETE");
                 popupMenu.getMenu().add("MOVE");
                 popupMenu.getMenu().add("RENAME");
+                popupMenu.getMenu().add("SHARE TO GOOGLE DRIVE");
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -138,6 +146,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                             });
                             alertDialog.create()
                                     .show();
+                        }
+
+                        if(item.getTitle().equals("SHARE TO GOOGLE DRIVE")){
+                            String path = selectedFile.getAbsolutePath();
+                            Bundle bn = new Bundle();
+                            Intent gameActivityIntent = new Intent(context, GoogleDrive.class);
+                            gameActivityIntent.putExtra("path", path);
+                            startActivity(context, gameActivityIntent, bn);
+
+
                         }
                         return true;
                     }
@@ -206,5 +224,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public boolean move_file(String filePath){
         return root.renameTo(new File(filePath));
     }
+
+
 }
-//

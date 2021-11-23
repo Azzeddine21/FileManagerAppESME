@@ -34,6 +34,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private File root;
     private boolean MoveFile=false;
     private String SelectedFile="";
+    public AdapterCallback mAdapterCallback;
+
+    public interface AdapterCallback {
+        void onMethodCallback(File file);
+    }
 
     public MyAdapter(Context context, File root){
         this.context = context;
@@ -80,6 +85,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                             .replace(R.id.frame_layout_container, FileList.class, bundle)
                             .addToBackStack(null)
                             .commit();
+                }else{
+                    mAdapterCallback.onMethodCallback(selectedFile);
                 }
             }
         });
@@ -96,34 +103,31 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getTitle().equals("DELETE")){
-                            boolean deleted = selectedFile.delete();
-                            if(deleted){
-                                Toast.makeText(context.getApplicationContext(),"DELETED ",Toast.LENGTH_SHORT).show();
-                                //v.setVisibility(View.GONE);
-                                updatefilesAndFolders();
-                            }
+                            deleteRecursive(selectedFile);
+                            updatefilesAndFolders();
                         }
+
                         if(item.getTitle().equals("MOVE")){
                             Intent intent = new Intent(v.getContext(), MoveFile.class);
                             String path = Environment.getExternalStorageDirectory().getPath();
-                            intent.putExtra("path",path);
+                            intent.putExtra("path",path+ "/" + new MainActivity().rootFolder + "/");
                             intent.putExtra("SelectedFile",selectedFile.getAbsolutePath());
                             ((Activity) context).startActivity(intent);
                         }
+
                         if(item.getTitle().equals("RENAME")){
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getRootView().getContext());
                             alertDialog.setTitle("Rename to");
                             EditText editText = new EditText(context);
                             String path = selectedFile.getAbsolutePath();
-                            final File file =new File(path);
-                            editText.setText(file.getName());
+                            final File file = new File(path);
+                            editText.setText(file.getName().substring(6,file.getName().length()));
                             alertDialog.setView(editText);
                             editText.requestFocus();
-
                             alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    String newPath = file.getParentFile().getAbsolutePath() + "/" + editText.getText().toString();
+                                    String newPath = file.getParentFile().getAbsolutePath() + "/" + file.getName().substring(0,6) + editText.getText().toString();
                                     File newFile = new File(newPath);
                                     boolean renamed = file.renameTo(newFile);
                                     if (renamed){
@@ -159,7 +163,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-    //permet de chosiir l'image et le texte à afficher pour chaque fichier
+    //permet de chosir l'image et le texte à afficher pour chaque fichier
         TextView textView;
         ImageView imageView;
 
@@ -168,6 +172,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             textView = itemView.findViewById(R.id.file_name_text_view);
             imageView = itemView.findViewById(R.id.icon_view);
         }
+    }
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
     }
 
     public void updatefilesAndFolders() {
@@ -202,9 +214,4 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         Collections.reverse(Arrays.asList(_filesAndFolders));
         return _filesAndFolders;
     }
-
-    public boolean move_file(String filePath){
-        return root.renameTo(new File(filePath));
-    }
-
 }

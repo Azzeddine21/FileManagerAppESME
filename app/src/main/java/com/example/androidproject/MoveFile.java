@@ -21,18 +21,13 @@ public class MoveFile extends AppCompatActivity {
 
         String path = getIntent().getStringExtra("path");
         Bundle bundle = new Bundle();
+        bundle.putInt("Activity",getIntent().getIntExtra("Activity",0));
         bundle.putString("path", path);
-        bundle.putBoolean("MoveFile",true);
         bundle.putString("SelectedFile", getIntent().getStringExtra("SelectedFile"));
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.frame_layout_container, FileList.class, bundle)
+                .add(R.id.frame_layout_container, MyMainFragment.class, bundle)
                 .commit();
-    }
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_file_list, container, false);
-        return view;
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.androidproject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -10,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
 
@@ -39,12 +45,15 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
         setFilesAndFolders();
     }
 
+
     public interface AdapterCallback{
         void openDirectoryCallback(String directoryPath,int Activity);
         void deleteFileCallback(File file);
         void moveFileCallback(File file);
         void renameFileCallback(File file);
+        void forceRenameFileCallback(File file);
         void selectFileCallback(File file);
+        void setToFavoriteCallback(File file, boolean checked);
     }
 
     @Override
@@ -64,6 +73,29 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
         }else{
             holder.imageView.setImageResource(R.drawable.ic_baseline_insert_drive_file_24);
         }
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("favFile", Context.MODE_PRIVATE);
+        boolean favFileToggleButton = sharedPreferences.getBoolean(selectedFile.getAbsolutePath(),false);
+
+        if (favFileToggleButton){
+            holder.favoriteToggleButton.setChecked(true);
+        }else{
+            holder.favoriteToggleButton.setChecked(false);
+        }
+
+        holder.favoriteToggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.favoriteToggleButton.isChecked()){
+                    Log.d("onClickSelected","true");
+                    myAdapterCallback.setToFavoriteCallback(selectedFile, true);
+                }else{
+                    Log.d("onClickSelected","false");
+                    myAdapterCallback.setToFavoriteCallback(selectedFile, false);
+                }
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,33 +109,40 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
                 }
             }
         });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(context,view);
-                popupMenu.getMenu().add("DELETE");
-                popupMenu.getMenu().add("MOVE");
-                popupMenu.getMenu().add("RENAME");
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if(menuItem.getTitle().equals("DELETE")){
-                            myAdapterCallback.deleteFileCallback(selectedFile);
-                            setFilesAndFolders(); // à voir s'il ne faudrait pas bouger ça dans le main ?
+        if(Activity!= new FavoriteFragment().FavoriteFileRequest){
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    PopupMenu popupMenu = new PopupMenu(context,view);
+                    popupMenu.getMenu().add("DELETE");
+                    popupMenu.getMenu().add("MOVE");
+                    popupMenu.getMenu().add("RENAME");
+                    popupMenu.getMenu().add("FORCE RENAME");
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            if(menuItem.getTitle().equals("DELETE")){
+                                myAdapterCallback.deleteFileCallback(selectedFile);
+                                setFilesAndFolders(); // à voir s'il ne faudrait pas bouger ça dans le main ?
+                            }
+                            if(menuItem.getTitle().equals("MOVE")){
+                                myAdapterCallback.moveFileCallback(selectedFile);
+                            }
+                            if(menuItem.getTitle().equals("RENAME")){
+                                myAdapterCallback.renameFileCallback(selectedFile); // probleme d'overlapping du text
+                            }
+                            if(menuItem.getTitle().equals("FORCE RENAME")){
+                                myAdapterCallback.forceRenameFileCallback(selectedFile);
+                            }
+                            return true;
                         }
-                        if(menuItem.getTitle().equals("MOVE")){
-                            myAdapterCallback.moveFileCallback(selectedFile);
-                        }
-                        if(menuItem.getTitle().equals("RENAME")){
-                            myAdapterCallback.renameFileCallback(selectedFile); // probleme d'overlapping du text
-                        }
-                        return true;
-                    }
-                });
-                popupMenu.show();
-                return true;
-            }
-        });
+                    });
+                    popupMenu.show();
+                    return true;
+                }
+            });
+        }
+
     }
 
     @Override
@@ -148,11 +187,13 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
         //Selection des icones à afficher dans le RecylerView
         TextView textView;
         ImageView imageView;
+        ToggleButton favoriteToggleButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.file_name_text_view);
             imageView = itemView.findViewById(R.id.icon_view);
+            favoriteToggleButton = itemView.findViewById(R.id.favorite_toggle);
         }
     }
 }

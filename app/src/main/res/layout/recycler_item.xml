@@ -22,6 +22,18 @@
         android:textColor="@color/black"
         tools:text="Documents"/>
 
+    <ToggleButton
+        android:id="@+id/favorite_toggle"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignRight="@+id/file_name_text_view"
+        android:layout_centerVertical="true"
+        android:background="@drawable/toggle_selector"
+        android:textOff=""
+        android:textOn="">
+
+    </ToggleButton>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -9,12 +9,11 @@
 
         <TextView
             android:id="@+id/nofiles_textview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="NO FILES FOUND"
             android:visibility="invisible"
-            android:layout_gravity="center"
-            tools:ignore="MissingConstraints" />
+            android:layout_gravity="center" />
 
         <com.nambimobile.widgets.efab.ExpandableFabLayout
             android:layout_width="match_parent"
@@ -31,8 +30,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="@dimen/efab_ui_margin_large"
-                    android:layout_marginRight="@dimen/efab_ui_margin_large"
+                    android:layout_marginEnd="37dp"
+                    android:layout_marginRight="37dp"
                     app:efab_iconAnimationRotationDeg="45"
                     app:efab_openingAnimationDurationMs="250"
                     app:efab_closingAnimationDurationMs="250" />

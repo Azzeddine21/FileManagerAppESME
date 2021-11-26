@@ -2,8 +2,10 @@ package com.example.androidproject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
@@ -22,6 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCallback{
@@ -41,8 +46,6 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         View view = null;
         Activity = requireArguments().getInt("Activity");
         switch (Activity){
-            case 1:
-                break;
             case MoveFileRequest:
                 view = inflater.inflate(R.layout.fragment_move_file, container, false);
                 Button cancel = view.findViewById(R.id.cancel_button);
@@ -66,6 +69,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
                 });
                 break;
             case ImportFileRequest:
+                Log.d("ImportFileRequest","true");
                 view = inflater.inflate(R.layout.fragment_move_file, container, false);
                 cancel = view.findViewById(R.id.cancel_button);
                 cancel.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +218,41 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
     }
 
     @Override
+    public void forceRenameFileCallback(File file) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Rename to");
+        EditText editText = new EditText(getContext());
+        String path = file.getAbsolutePath();
+        final File oldfile = new File(path);
+        editText.setText(oldfile.getName());
+        alertDialog.setView(editText);
+        editText.requestFocus();
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String newPath = oldfile.getParentFile().getAbsolutePath() + "/" + editText.getText().toString();
+                File newFile = new File(newPath);
+                boolean renamed = oldfile.renameTo(newFile);
+                if (renamed){
+                    Toast.makeText(getContext(),"File Renamed", Toast.LENGTH_SHORT);
+                } else{
+                    Toast.makeText(getContext(),"Process Failed", Toast.LENGTH_SHORT);
+                }
+                adapter.setFilesAndFolders();
+                dialogInterface.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        alertDialog.create()
+                .show();
+    }
+
+    @Override
     public void selectFileCallback(File file) {
         File from = new File(root.getAbsolutePath() + "/" + file.getName());
         File to = new File(requireArguments().getString("SelectedFile") + "/" + file.getName());
@@ -222,6 +261,14 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         from.renameTo(to);
         adapter.setFilesAndFolders();
         getActivity().finish();
+    }
+
+    @Override
+    public void setToFavoriteCallback(File file, boolean checked) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("favFile", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(file.getAbsolutePath(),checked);
+        editor.commit();
     }
 
     public int depth(File file,int _count){
@@ -245,19 +292,19 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         String parentPath = parentFile.getAbsolutePath() + "/";
         switch (depth(file,0)){
             case 0:
-                if(length>10){
+                if(length>=10){
                     onError();
                     return file;
                 }
                 return new File(parentPath + String.valueOf(length) + "0-" + String.valueOf(length) +"9 " +  fileName);
             case 1:
-                if(length>10){
+                if(length>=10){
                     onError();
                     return file;
                 }
                 return new File(parentPath + parentFile.getName().charAt(0) + String.valueOf(length) + " " + fileName);
             case 2:
-                if (length>100){
+                if (length>=100){
                     onError();
                 }
                 return new File(parentPath + parentFile.getName().substring(0,2) + "." + String.format("%02d", length) + " " + fileName);

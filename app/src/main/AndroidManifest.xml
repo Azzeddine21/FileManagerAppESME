@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidProject"
         android:requestLegacyExternalStorage="true">
-        <activity android:name=".MoveFile"></activity>
+        <activity
+            android:name=".GoogleDrive"
+            android:exported="false" />
+        <activity android:name=".MoveFile" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

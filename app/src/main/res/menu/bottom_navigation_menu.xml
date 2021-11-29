@@ -5,7 +5,7 @@
         android:id="@+id/page_1"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_favorite_border_24"
-        android:title="favoris"/>
+        android:title="favoris" />
     <item
         android:id="@+id/page_2"
         android:enabled="true"

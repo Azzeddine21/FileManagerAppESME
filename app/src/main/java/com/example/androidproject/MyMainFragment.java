@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,7 +94,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
                         alertDialog.setView(editText);
                         editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                         editText.requestFocus();
-                        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        alertDialog.setPositiveButton(Html.fromHtml("<font color='#EEB81A'>Ok</font>"), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String newPath = root.getAbsolutePath() + "/" + editText.getText().toString();
@@ -105,7 +106,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
                                 }
                             }
                         });
-                        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        alertDialog.setNegativeButton(Html.fromHtml("<font color='#EEB81A'>Cancel</font>"), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
@@ -192,7 +193,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         alertDialog.setView(editText);
         editText.requestFocus();
         String tag = oldfile.getName().replace(removeTag(oldfile).getName(),"");
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(Html.fromHtml("<font color='#EEB81A'>Ok</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String newPath = oldfile.getParentFile().getAbsolutePath() + "/" + tag + editText.getText().toString();
@@ -207,7 +208,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
                 dialogInterface.dismiss();
             }
         });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton(Html.fromHtml("<font color='#EEB81A'>Cancel</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -227,7 +228,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         editText.setText(oldfile.getName());
         alertDialog.setView(editText);
         editText.requestFocus();
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(Html.fromHtml("<font color='#EEB81A'>Ok</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String newPath = oldfile.getParentFile().getAbsolutePath() + "/" + editText.getText().toString();
@@ -242,7 +243,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
                 dialogInterface.dismiss();
             }
         });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton(Html.fromHtml("<font color='#EEB81A'>Cancel</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -269,6 +270,15 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(file.getAbsolutePath(),checked);
         editor.commit();
+    }
+
+    @Override
+    public void sharetoDriveCallback(File file) {
+        String path = file.getAbsolutePath();
+        Bundle bn = new Bundle();
+        Intent gameActivityIntent = new Intent(getContext(), GoogleDrive.class);
+        gameActivityIntent.putExtra("path", path);
+        getContext().startActivity(gameActivityIntent, bn);
     }
 
     public int depth(File file,int _count){
@@ -329,7 +339,7 @@ public class MyMainFragment extends Fragment implements MyNewAdapter.AdapterCall
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getView().getRootView().getContext());
         alertDialog.setTitle("Warning");
         alertDialog.setMessage("The number of items is above the Johny Decimal Limits\nThe Folder won't have any number");
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(Html.fromHtml("<font color='#EEB81A'>Ok</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

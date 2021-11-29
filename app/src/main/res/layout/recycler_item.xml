@@ -19,7 +19,7 @@
         android:id="@+id/file_name_text_view"
         android:layout_toEndOf="@id/icon_view"
         android:padding="10dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         tools:text="Documents"/>
 
     <ToggleButton

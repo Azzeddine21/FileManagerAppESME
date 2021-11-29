@@ -1,11 +1,15 @@
 package com.example.androidproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -20,7 +24,6 @@ import java.util.Map;
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder>{
 
     private Context context;
-    private File root;
 
     private ArrayList<File> favFileList = new ArrayList<File>();
     public FavoriteAdapterCallback  myFavoriteAdapterCallback;
@@ -73,7 +76,16 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 if(selectedFile.isDirectory()){
                     myFavoriteAdapterCallback.openDirectoryCallback(selectedFile.getAbsolutePath(),0);
                 }else{
-                    //open the file
+                    Intent intent = new Intent();
+                    MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    String extension = selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1);
+                    String mimeTypeFromExtension = mime.getMimeTypeFromExtension(extension);
+
+                    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("file://" + selectedFile.getAbsolutePath()), mimeTypeFromExtension);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    context.startActivity(intent);
                 }
             }
         });

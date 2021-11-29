@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -54,6 +57,7 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
         void forceRenameFileCallback(File file);
         void selectFileCallback(File file);
         void setToFavoriteCallback(File file, boolean checked);
+        void sharetoDriveCallback(File file);
     }
 
     @Override
@@ -101,11 +105,19 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
             public void onClick(View view) {
                 if(selectedFile.isDirectory()){
                     myAdapterCallback.openDirectoryCallback(selectedFile.getAbsolutePath(), Activity);
+                }else if(Activity==new MyMainFragment().ImportFileRequest){
+                    myAdapterCallback.selectFileCallback(selectedFile);
                 }else{
-                    if(Activity==new MyMainFragment().ImportFileRequest){
-                        myAdapterCallback.selectFileCallback(selectedFile);
-                    }
-                    //open the file
+                    Intent intent = new Intent();
+                    MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    String extension = selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1);
+                    String mimeTypeFromExtension = mime.getMimeTypeFromExtension(extension);
+
+                    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("file://" + selectedFile.getAbsolutePath()), mimeTypeFromExtension);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    context.startActivity(intent);
                 }
             }
         });
@@ -118,21 +130,25 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
                     popupMenu.getMenu().add("MOVE");
                     popupMenu.getMenu().add("RENAME");
                     popupMenu.getMenu().add("FORCE RENAME");
+                    popupMenu.getMenu().add("SHARE ON GOOGLE DRIVE");
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             if(menuItem.getTitle().equals("DELETE")){
                                 myAdapterCallback.deleteFileCallback(selectedFile);
-                                setFilesAndFolders(); // à voir s'il ne faudrait pas bouger ça dans le main ?
+                                setFilesAndFolders();
                             }
                             if(menuItem.getTitle().equals("MOVE")){
                                 myAdapterCallback.moveFileCallback(selectedFile);
                             }
                             if(menuItem.getTitle().equals("RENAME")){
-                                myAdapterCallback.renameFileCallback(selectedFile); // probleme d'overlapping du text
+                                myAdapterCallback.renameFileCallback(selectedFile);
                             }
                             if(menuItem.getTitle().equals("FORCE RENAME")){
                                 myAdapterCallback.forceRenameFileCallback(selectedFile);
+                            }
+                            if(menuItem.getTitle().equals("SHARE ON GOOGLE DRIVE")){
+                                myAdapterCallback.sharetoDriveCallback(selectedFile);
                             }
                             return true;
                         }

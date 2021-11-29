@@ -10,7 +10,7 @@ public class MoveFile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.move_file_layout);
-
+        getSupportActionBar().hide();
         String path = getIntent().getStringExtra("path");
         Bundle bundle = new Bundle();
         bundle.putInt("Activity",getIntent().getIntExtra("Activity",new MyMainFragment().MoveFileRequest));

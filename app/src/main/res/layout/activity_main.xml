@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@color/purple_700">
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frame_layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_navigation_menu"
+        android:background="@color/purple_200"
+        app:itemIconTint="@color/toggle_bottom_navigation"
+        app:itemTextColor="@color/toggle_bottom_navigation"
+
+        >
+
+
+        <TextView
+            android:id="@+id/pseudo"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="280dp"
+            android:layout_marginTop="40dp"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/signout"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="sign-out"
+            android:textSize="20dp"
+            android:layout_marginLeft="360dp"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"/>
+
+        <Button
+
+            android:id="@+id/signin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="280dp"
+            android:layout_marginTop="25dp"
+            android:background="@android:color/transparent"
+            android:insetLeft="0dp"
+            android:text="connexion"
+            android:textSize="10dp"
+            android:visibility="visible" />
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+</LinearLayout>

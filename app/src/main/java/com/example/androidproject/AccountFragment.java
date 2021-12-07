@@ -82,14 +82,7 @@ public class AccountFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                mGoogleSignInClient.signOut()
-                        .addOnCompleteListener((Activity) getContext(), new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(getContext(), "User SignOut", Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
+                mGoogleSignInClient.signOut();
                 signIn();
             }
         });

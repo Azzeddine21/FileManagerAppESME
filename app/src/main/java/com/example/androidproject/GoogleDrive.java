@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,8 +35,9 @@ import java.util.Collections;
 public class GoogleDrive extends AppCompatActivity {
     DriveServiceHelper mDriveServiceHelper;
     String path;
-    Button mSignInButton = MainActivity.mSignInButton, mSignOutButton = MainActivity.mSignOutButton;
-    TextView pseudo2 = MainActivity.pseudo;
+    SignInButton mSignInButton = AccountFragment.mSignInButton;
+    Button mSignOutButton = AccountFragment.mSignOutButton, changeAccount = AccountFragment.changeAccount;
+    TextView pseudo2 = AccountFragment.pseudo;
 
 
 
@@ -90,6 +92,7 @@ public class GoogleDrive extends AppCompatActivity {
                         mSignInButton.setVisibility(View.INVISIBLE);
                         pseudo2.setVisibility(View.VISIBLE);
                         mSignOutButton.setVisibility(View.VISIBLE);
+                        changeAccount.setVisibility(View.VISIBLE);
                         Drive googleDriveService = new Drive.Builder(
                                 AndroidHttp.newCompatibleTransport(),
                                 new GsonFactory(),

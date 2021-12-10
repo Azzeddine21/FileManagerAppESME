@@ -60,12 +60,12 @@ public class AccountFragment extends Fragment {
     public static SignInButton mSignInButton;
     public static Button mSignOutButton, changeAccount;
     public static TextView pseudo;
-    LinearLayout mLinearLayout;
+    public static LinearLayout mLinearLayout;
     GoogleSignInClient mGoogleSignInClient;
     String pseudoString;
-    ImageView profileImage;
+    public static ImageView profileImage;
     static GoogleSignInAccount account;
-    Uri profile;
+    public static Uri profile;
     SharedPreferences mSharedPreferences;
     SharedPreferences.Editor mEditor;
     static boolean myBool;
@@ -87,7 +87,7 @@ public class AccountFragment extends Fragment {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
-        mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        mSharedPreferences = getActivity().getSharedPreferences("saveLogin", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
         myBool=  mSharedPreferences.getBoolean("save", false);

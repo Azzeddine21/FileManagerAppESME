@@ -130,7 +130,9 @@ public class MyNewAdapter extends RecyclerView.Adapter<MyNewAdapter.ViewHolder>{
                     popupMenu.getMenu().add("MOVE");
                     popupMenu.getMenu().add("RENAME");
                     popupMenu.getMenu().add("FORCE RENAME");
-                    popupMenu.getMenu().add("SHARE ON GOOGLE DRIVE");
+                    if(!(selectedFile.isDirectory())){
+                        popupMenu.getMenu().add("SHARE ON GOOGLE DRIVE");
+                    }
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {

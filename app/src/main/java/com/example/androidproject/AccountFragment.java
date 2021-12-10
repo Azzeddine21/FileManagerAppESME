@@ -189,6 +189,7 @@ public class AccountFragment extends Fragment {
             mEditor.putString("pseudo", pseudoString);
             mEditor.putBoolean("save", true);
             mEditor.commit();
+
             Toast.makeText(getContext(), "Sign-in successful", Toast.LENGTH_SHORT).show();
             pseudo.setText(pseudoString);
             revealAccountInformation();

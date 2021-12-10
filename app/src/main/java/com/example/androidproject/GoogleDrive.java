@@ -140,6 +140,7 @@ public class GoogleDrive extends AppCompatActivity {
             @Override
             public void onSuccess(String s) {
                 progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "File uploaded on Google Drive", Toast.LENGTH_LONG).show();
                 finish();
 
             }
@@ -148,7 +149,7 @@ public class GoogleDrive extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Check yout google Drive Key", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "A problem has been encountered", Toast.LENGTH_LONG).show();
                         finish();
 
                     }

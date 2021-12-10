@@ -137,7 +137,7 @@ public class GoogleDrive extends AppCompatActivity {
 
     public void uploadFile() {
         ProgressDialog progressDialog = new ProgressDialog(GoogleDrive.this);
-        progressDialog.setTitle("Uploading to Google Drive");
+        progressDialog.setTitle("Uploading on Google Drive");
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
 

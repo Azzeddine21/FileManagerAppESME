@@ -102,7 +102,9 @@ public class GoogleDrive extends AppCompatActivity {
                         profile = googleSignInAccount.getPhotoUrl();
                         if(profile == null){
                             mEditor2.putString("imageView", null);
-                            profileImage2.setImageResource(R.drawable.blank_profile);
+                        } else{
+                            mEditor2.putString("imageView", profile.toString() );
+
                         }
                         mEditor2.putString("pseudo", pseudoString);
                         mEditor2.putBoolean("save", true);

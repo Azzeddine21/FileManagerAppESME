@@ -158,24 +158,4 @@ public class GoogleDrive extends AppCompatActivity {
                     }
                 });
     }
-
-    private void removeAccountInformation() {
-        mSignInButton.setVisibility(View.VISIBLE);
-        mLinearLayout2.setVisibility(View.INVISIBLE);
-        pseudo2.setVisibility(View.INVISIBLE);
-        pseudo2.setText("");
-        mSignOutButton.setVisibility(View.INVISIBLE);
-        changeAccount.setVisibility(View.INVISIBLE);
-    }
-
-    private void revealAccountInformation() {
-        mSignInButton.setVisibility(View.INVISIBLE);
-        mLinearLayout2.setVisibility(View.VISIBLE);
-        pseudo2.setVisibility(View.VISIBLE);
-        profileImage2.setVisibility(View.VISIBLE);
-        mSignOutButton.setVisibility(View.VISIBLE);
-        changeAccount.setVisibility(View.VISIBLE);
-    }
-
-
 }

@@ -40,14 +40,8 @@ import java.util.Collections;
 public class GoogleDrive extends AppCompatActivity {
     DriveServiceHelper mDriveServiceHelper;
     String path;
-    SignInButton mSignInButton = AccountFragment.mSignInButton;
-    Button mSignOutButton = AccountFragment.mSignOutButton, changeAccount = AccountFragment.changeAccount;
-    TextView pseudo2 = AccountFragment.pseudo;
-    LinearLayout mLinearLayout2 = AccountFragment.mLinearLayout;
-    String pseudoString;
     Uri profile;
     ImageView profileImage2 = AccountFragment.profileImage;
-
     SharedPreferences mSharedPreferences2;
     SharedPreferences.Editor mEditor2;
 

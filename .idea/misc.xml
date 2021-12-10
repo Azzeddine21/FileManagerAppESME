@@ -5,11 +5,13 @@
       <map>
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/drawable-v24/ic_baseline_person_outline_24.xml" value="0.590625" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/activity_google_drive.xml" value="0.34479166666666666" />
-        <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/activity_main.xml" value="0.5669835782195333" />
+        <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/activity_sign_in.xml" value="0.16767983789260385" />
+        <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/fragment_account.xml" value="0.33" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/fragment_display_file.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/fragment_file_list.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/fragment_move_file.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/fragment_sign_in.xml" value="0.2793819655521783" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/move_file_layout.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/layout/recycler_item.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/Azzeddine/Downloads/FileManagerAppESME-feature-ColorAzzedineWorkIntegration-Mehdi/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1" />

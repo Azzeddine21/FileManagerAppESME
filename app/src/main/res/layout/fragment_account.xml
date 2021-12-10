@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:text="sign out"
+        android:text="Deconnexion"
         android:textSize="10dp"
         android:visibility="invisible" />
 
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="150dp"
-        android:text="change account"
+        android:text="Changer de compte"
         android:textSize="10dp"
         android:visibility="invisible" />
 
